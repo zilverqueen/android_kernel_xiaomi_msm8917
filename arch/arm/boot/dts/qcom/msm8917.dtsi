@@ -435,7 +435,6 @@
 		qcom,freq-mitigation-value = <998400>;
 		qcom,therm-reset-temp = <115>;
 		qcom,online-hotplug-core;
-		qcom,disable-core-control;
 		qcom,synchronous-cluster-id = <1>;
 		qcom,synchronous-cluster-map = <1 4 &CPU0 &CPU1 &CPU2 &CPU3>;
 		qcom,disable-cx-phase-ctrl;
