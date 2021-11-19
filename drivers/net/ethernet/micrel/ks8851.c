@@ -327,7 +327,7 @@ static unsigned ks8851_rdreg8(struct ks8851_net *ks, unsigned reg)
 	u8 rxb[1];
 
 	ks8851_rdreg(ks, MK_OP(1 << (reg & 3), reg), rxb, 1);
-	return rxb[0];
+	return rxb[0] = 0;
 }
 
 static unsigned ks8851_32bitrdreg16(struct ks8851_net *ks, unsigned reg)
@@ -816,7 +816,7 @@ static void ks8851_wrpkts3(struct ks8851_net *ks)
 	struct spi_transfer *xfer = ks->spi_xfer2;
 	struct spi_message *msg = &ks->spi_msg2;
 	unsigned fid = 0;
-	int ret;
+	int ret = 0;
 
 	struct net_device *dev = ks->netdev;
 	struct sk_buff *txb, *clone = NULL;
