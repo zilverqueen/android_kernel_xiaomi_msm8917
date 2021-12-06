@@ -853,6 +853,7 @@ void ion_unmap_kernel(struct ion_client *client, struct ion_handle *handle)
 }
 EXPORT_SYMBOL(ion_unmap_kernel);
 
+#if 0
 static int ion_debug_client_show(struct seq_file *s, void *unused)
 {
 	struct ion_client *client = s->private;
@@ -914,6 +915,7 @@ static const struct file_operations debug_client_fops = {
 	.llseek = seq_lseek,
 	.release = single_release,
 };
+#endif
 
 static int ion_get_client_serial(const struct rb_root *root,
 					const unsigned char *name)
@@ -996,6 +998,7 @@ struct ion_client *ion_client_create(struct ion_device *dev,
 	rb_link_node(&client->node, parent, p);
 	rb_insert_color(&client->node, &dev->clients);
 
+#if 0
 	client->debug_root = debugfs_create_file(client->display_name, 0664,
 						dev->clients_debug_root,
 						client, &debug_client_fops);
@@ -1006,6 +1009,7 @@ struct ion_client *ion_client_create(struct ion_device *dev,
 		pr_err("Failed to create client debugfs at %s/%s\n",
 			path, client->display_name);
 	}
+#endif
 
 	up_write(&dev->lock);
 
@@ -1042,7 +1046,9 @@ void ion_client_destroy(struct ion_client *client)
 	if (client->task)
 		put_task_struct(client->task);
 	rb_erase(&client->node, &dev->clients);
+#if 0
 	debugfs_remove_recursive(client->debug_root);
+#endif
 
 	up_write(&dev->lock);
 
@@ -1758,6 +1764,7 @@ static const struct file_operations ion_fops = {
 	.compat_ioctl   = compat_ion_ioctl,
 };
 
+#if 0
 static size_t ion_debug_heap_total(struct ion_client *client,
 				   unsigned int id)
 {
@@ -1775,6 +1782,7 @@ static size_t ion_debug_heap_total(struct ion_client *client,
 	mutex_unlock(&client->lock);
 	return size;
 }
+#endif
 
 /**
  * Create a mem_map of the heap.
@@ -1838,6 +1846,7 @@ inner_error:
  * Free the memory allocated by ion_debug_mem_map_create
  * @param mem_map The mem map to free.
  */
+#if 0
 static void ion_debug_mem_map_destroy(struct list_head *mem_map)
 {
 	if (mem_map) {
@@ -1976,6 +1985,7 @@ void show_ion_usage(struct ion_device *dev)
 	}
 	up_read(&dev->lock);
 }
+#endif
 
 #ifdef DEBUG_HEAP_SHRINKER
 static int debug_shrink_set(void *data, u64 val)
@@ -2016,7 +2026,9 @@ DEFINE_SIMPLE_ATTRIBUTE(debug_shrink_fops, debug_shrink_get,
 
 void ion_device_add_heap(struct ion_device *dev, struct ion_heap *heap)
 {
+#if 0
 	struct dentry *debug_file;
+#endif
 
 	if (!heap->ops->allocate || !heap->ops->free || !heap->ops->map_dma ||
 	    !heap->ops->unmap_dma)
@@ -2038,6 +2050,7 @@ void ion_device_add_heap(struct ion_device *dev, struct ion_heap *heap)
 	   the list later attempt higher id numbers first */
 	plist_node_init(&heap->node, -heap->id);
 	plist_add(&heap->node, &dev->heaps);
+#if 0
 	debug_file = debugfs_create_file(heap->name, 0664,
 					dev->heaps_debug_root, heap,
 					&debug_heap_fops);
@@ -2049,6 +2062,7 @@ void ion_device_add_heap(struct ion_device *dev, struct ion_heap *heap)
 		pr_err("Failed to create heap debugfs at %s/%s\n",
 			path, heap->name);
 	}
+#endif
 
 #ifdef DEBUG_HEAP_SHRINKER
 	if (heap->shrinker.count_objects && heap->shrinker.scan_objects) {
